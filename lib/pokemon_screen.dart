@@ -22,6 +22,7 @@ class _PokemonScreenState extends State<PokemonScreen> {
     return Scaffold(
         backgroundColor: widget.color,
         body: Stack(
+          alignment: Alignment.center,
           children: [
             Positioned(
               top: 20,
@@ -49,6 +50,26 @@ class _PokemonScreenState extends State<PokemonScreen> {
               ),
             ),
             Positioned(
+              top: 140,
+              left: 20,
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 8, right: 8, top: 4, bottom: 4),
+                  child: Text(
+                    widget.pokemonDetail['type'].join(', '),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: Colors.black26,
+                ),
+              ),
+            ),
+            Positioned(
               top: height * 0.18,
               right: -10,
               child: Image.asset('images/pokeball.png',
@@ -65,6 +86,46 @@ class _PokemonScreenState extends State<PokemonScreen> {
                     topRight: Radius.circular(30),
                   ),
                   color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: width * 0.3,
+                              child: Text(
+                                'Name',
+                                style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: width * 0.3,
+                              child: Text(
+                                widget.pokemonDetail['name'],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
