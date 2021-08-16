@@ -60,13 +60,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     itemCount: pokedex.length,
                     itemBuilder: (context, index) {
-                      var type = pokedex[index]['type'];
+                      var type = pokedex[index]['type'][0];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 12),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.green,
+                            color: type == 'Grass'
+                                ? Colors.greenAccent
+                                : type == 'Fire'
+                                    ? Colors.redAccent
+                                    : type == 'Water'
+                                        ? Colors.blue
+                                        : type == 'Electric'
+                                            ? Colors.yellow
+                                            : type == 'Rock'
+                                                ? Colors.grey
+                                                : type == 'Ground'
+                                                    ? Colors.brown
+                                                    : type == 'Psychic'
+                                                        ? Colors.indigo
+                                                        : type == 'Fighting'
+                                                            ? Colors.orange
+                                                            : type == 'Bug'
+                                                                ? Colors
+                                                                    .lightGreenAccent
+                                                                : type ==
+                                                                        'Ghost'
+                                                                    ? Colors
+                                                                        .deepPurple
+                                                                    : type ==
+                                                                            'Normal'
+                                                                        ? Colors
+                                                                            .black26
+                                                                        : type ==
+                                                                                'Poison'
+                                                                            ? Colors.deepPurpleAccent
+                                                                            : Colors.pink,
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                           child: Stack(
@@ -99,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.only(
                                         left: 8, right: 8, top: 4, bottom: 4),
                                     child: Text(
-                                      type[0].toString(),
+                                      pokedex[index]['type'][0],
                                       style: TextStyle(
                                         color: Colors.white,
                                       ),
