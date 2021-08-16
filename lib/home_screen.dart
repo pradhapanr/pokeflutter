@@ -22,33 +22,114 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1.3,
-              ),
-              itemCount: pokedex.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  color: Colors.green,
-                  child: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          Text(pokedex[index]['name']),
-                          CachedNetworkImage(imageUrl: pokedex[index]['img']),
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              },
+          Positioned(
+            top: -30,
+            right: -50,
+            child: Image.asset(
+              'images/pokeball.png',
+              width: 200,
+              fit: BoxFit.fitWidth,
             ),
-          )
+          ),
+          Positioned(
+            child: Text('Pokedex',
+                style: TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                )),
+            top: 100,
+            left: 20,
+          ),
+          Positioned(
+            top: 125,
+            bottom: 0,
+            width: width,
+            child: Column(
+              children: [
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.3,
+                    ),
+                    itemCount: pokedex.length,
+                    itemBuilder: (context, index) {
+                      var type = pokedex[index]['type'];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 12),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                bottom: -10,
+                                right: -10,
+                                child: Image.asset(
+                                  'images/pokeball.png',
+                                  height: 100,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                              Positioned(
+                                top: 30,
+                                left: 20,
+                                child: Text(
+                                  pokedex[index]['name'],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Colors.white),
+                                ),
+                              ),
+                              Positioned(
+                                top: 55,
+                                left: 20,
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8, right: 8, top: 4, bottom: 4),
+                                    child: Text(
+                                      type[0].toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                      color: Colors.black26,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 5,
+                                right: 5,
+                                child: CachedNetworkImage(
+                                  imageUrl: pokedex[index]['img'],
+                                  height: 95,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
