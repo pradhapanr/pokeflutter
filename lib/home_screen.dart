@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pokeflutter/pokemon_screen.dart';
+import 'package:pokeflutter/models/global.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,7 +15,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (mounted) {
       getPokedexData();
@@ -54,6 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 Expanded(
+                  // Setting up grid view for the Pokemon Cards
+                  // 2 Cards per Row
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -63,147 +65,97 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       var type = pokedex[index]['type'][0];
                       return InkWell(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 12),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: type == 'Grass'
-                                  ? Colors.greenAccent
-                                  : type == 'Fire'
-                                      ? Colors.redAccent
-                                      : type == 'Water'
-                                          ? Colors.blue
-                                          : type == 'Electric'
-                                              ? Colors.yellow
-                                              : type == 'Rock'
-                                                  ? Colors.grey
-                                                  : type == 'Ground'
-                                                      ? Colors.brown
-                                                      : type == 'Psychic'
-                                                          ? Colors.indigo
-                                                          : type == 'Fighting'
-                                                              ? Colors.orange
-                                                              : type == 'Bug'
-                                                                  ? Colors
-                                                                      .lightGreenAccent
-                                                                  : type ==
-                                                                          'Ghost'
-                                                                      ? Colors
-                                                                          .deepPurple
-                                                                      : type ==
-                                                                              'Normal'
-                                                                          ? Colors
-                                                                              .black26
-                                                                          : type == 'Poison'
-                                                                              ? Colors.deepPurpleAccent
-                                                                              : Colors.pink,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  bottom: -10,
-                                  right: -10,
-                                  child: Image.asset(
-                                    'images/pokeball.png',
-                                    height: 100,
-                                    fit: BoxFit.fitHeight,
-                                  ),
+                        child: Ink(
+                          height: 100,
+                          width: 100,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: colorMap[type],
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
                                 ),
-                                Positioned(
-                                  top: 30,
-                                  left: 20,
-                                  child: Text(
-                                    pokedex[index]['name'],
-                                    style: TextStyle(
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    //Widget for the pokeball image on the card
+                                    bottom: -10,
+                                    right: -10,
+                                    child: Image.asset(
+                                      'images/pokeball.png',
+                                      height: 100,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    //Widget for the Pokemon Name
+                                    top: 30,
+                                    left: 20,
+                                    child: Text(
+                                      pokedex[index]['name'],
+                                      style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
-                                        color: Colors.white),
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                Positioned(
-                                  top: 55,
-                                  left: 20,
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8, right: 8, top: 4, bottom: 4),
-                                      child: Text(
-                                        pokedex[index]['type'][0],
-                                        style: TextStyle(
-                                          color: Colors.white,
+                                  Positioned(
+                                    // Widget for the Pokemon Type
+                                    // Uses BoxDecoration for a bold appearance.
+                                    top: 55,
+                                    left: 20,
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8,
+                                            right: 8,
+                                            top: 4,
+                                            bottom: 4),
+                                        child: Text(
+                                          pokedex[index]['type'][0],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black26,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(20),
                                         ),
                                       ),
                                     ),
-                                    decoration: BoxDecoration(
-                                        color: Colors.black26,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))),
                                   ),
-                                ),
-                                Positioned(
-                                  bottom: 5,
-                                  right: 5,
-                                  child: CachedNetworkImage(
-                                    imageUrl: pokedex[index]['img'],
-                                    height: 95,
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                                )
-                              ],
+                                  Positioned(
+                                    // Widget for the image of the pokemon
+                                    // Uses the CachedNetworkImage library to load the images
+                                    bottom: 2,
+                                    right: 2,
+                                    child: CachedNetworkImage(
+                                      imageUrl: pokedex[index]['img'],
+                                      height: 90,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
                         onTap: () {
-                          //TODO Navigate to new details screen
+                          // Uses navigator class to load Pokemon Data page and passes in the
+                          // relative JSON object, index, and color for the page to use.
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => PokemonScreen(
                                 pokemonDetail: pokedex[index],
                                 heroTag: index,
-                                color: pokedex[index]['type'][0] == "Grass"
-                                    ? Colors.greenAccent
-                                    : pokedex[index]['type'][0] == "Fire"
-                                        ? Colors.redAccent
-                                        : pokedex[index]['type'][0] == "Water"
-                                            ? Colors.blue
-                                            : pokedex[index]['type'][0] ==
-                                                    "Poison"
-                                                ? Colors.deepPurpleAccent
-                                                : pokedex[index]['type'][0] ==
-                                                        "Electric"
-                                                    ? Colors.amber
-                                                    : pokedex[index]['type']
-                                                                [0] ==
-                                                            "Rock"
-                                                        ? Colors.grey
-                                                        : pokedex[index]['type']
-                                                                    [0] ==
-                                                                "Ground"
-                                                            ? Colors.brown
-                                                            : pokedex[index]['type']
-                                                                        [0] ==
-                                                                    "Psychic"
-                                                                ? Colors.indigo
-                                                                : pokedex[index]['type']
-                                                                            [
-                                                                            0] ==
-                                                                        "Fighting"
-                                                                    ? Colors
-                                                                        .orange
-                                                                    : pokedex[index]['type'][0] ==
-                                                                            "Bug"
-                                                                        ? Colors
-                                                                            .lightGreenAccent
-                                                                        : pokedex[index]['type'][0] ==
-                                                                                "Ghost"
-                                                                            ? Colors.deepPurple
-                                                                            : pokedex[index]['type'][0] == "Normal"
-                                                                                ? Colors.white70
-                                                                                : Colors.pink,
+                                color: colorMap[type],
                               ),
                             ),
                           );
@@ -230,12 +182,16 @@ class _HomeScreenState extends State<HomeScreen> {
       '/Biuni/PokemonGO-Pokedex/master/pokedex.json',
     );
 
-    await http.get(url).then((value) {
-      if (value.statusCode == 200) {
-        var jsonObject = convert.jsonDecode(value.body);
-        pokedex = jsonObject['pokemon'];
-        setState(() {});
-      }
-    });
+    await http.get(url).then(
+      (value) {
+        //Simple check to validate that HTTP request response is valid
+        //TODO: Create reload scenario in case reponse is false
+        if (value.statusCode == 200) {
+          var jsonObject = convert.jsonDecode(value.body);
+          pokedex = jsonObject['pokemon'];
+          setState(() {});
+        }
+      },
+    );
   }
 }

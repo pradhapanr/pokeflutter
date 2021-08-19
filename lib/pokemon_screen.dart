@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pokeflutter/models/global.dart';
 
 class PokemonScreen extends StatefulWidget {
   final pokemonDetail;
@@ -95,146 +96,12 @@ class _PokemonScreenState extends State<PokemonScreen> {
                       SizedBox(
                         height: 30,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: width * 0.3,
-                              child: Text(
-                                'Name',
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                widget.pokemonDetail['name'],
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: width * 0.3,
-                              child: Text(
-                                'Height',
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                widget.pokemonDetail['height'],
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: width * 0.3,
-                              child: Text(
-                                'Weight',
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                widget.pokemonDetail['weight'],
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: width * 0.3,
-                              child: Text(
-                                'Spawn Time',
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                widget.pokemonDetail['spawn_time'],
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: width * 0.3,
-                              child: Text(
-                                'Weakness',
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                widget.pokemonDetail['weaknesses'].join(", "),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      createPokemonDataText(width),
+
+                      // Padding widget for evolution was kept seperate because
+                      // the formatting was a bit different than the rest of them
+                      // because of the formatting of the JSON.
+
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -244,10 +111,7 @@ class _PokemonScreenState extends State<PokemonScreen> {
                               width: width * 0.3,
                               child: Text(
                                 'Evolution',
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 18,
-                                ),
+                                style: pokemonDataTitleStyle,
                               ),
                             ),
                             widget.pokemonDetail['next_evolution'] != null
@@ -267,11 +131,7 @@ class _PokemonScreenState extends State<PokemonScreen> {
                                             widget.pokemonDetail[
                                                     'next_evolution'][index]
                                                 ['name'],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            style: pokemonDataContentStyle,
                                           ),
                                         );
                                       },
@@ -304,5 +164,55 @@ class _PokemonScreenState extends State<PokemonScreen> {
             )
           ], //Children List
         ));
+  }
+
+  Widget createPokemonDataText(var width) {
+    var pokemonDataTitles = [
+      'Name',
+      'Height',
+      'Weight',
+      'Spawn Time',
+      'Weakness'
+    ];
+    var pokemonJSONFields = [
+      'name',
+      'height',
+      'weight',
+      'spawn_time',
+      'weaknesses'
+    ];
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          height: 30,
+        ),
+        for (var i = 0; i < pokemonDataTitles.length; i++)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  width: width * 0.3,
+                  child: Text(
+                    pokemonDataTitles[i],
+                    style: pokemonDataTitleStyle,
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    (i == 4) // weaknesses are returned in List format, have to use join in this case
+                        ? widget.pokemonDetail[pokemonJSONFields[i]].join(', ')
+                        : widget.pokemonDetail[pokemonJSONFields[i]],
+                    style: pokemonDataContentStyle,
+                  ),
+                ),
+              ],
+            ),
+          )
+      ],
+    );
   }
 }
